@@ -1,9 +1,9 @@
 {
   "name": "@code2knowledge/skill",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "description": "Agent Skill for evidence-based multi-repository business knowledge.",
-  "license": "ISC",
+  "license": "MIT",
   "engines": {
     "node": ">=20"
   },
@@ -27,7 +27,8 @@
     "references/",
     "scripts/",
     "LICENSE",
-    "README.md"
+    "README.md",
+    "THIRD_PARTY_NOTICES.md"
   ],
   "keywords": [
     "agent-skills",

@@ -346,7 +346,7 @@ npm publish --access public --registry=https://registry.npmjs.org
 
 ## 许可证
 
-采用 [ISC License](LICENSE)。知识模型和模板继承自 [Code2Knowledge](https://github.com/Muke-Coding/code2knowledge)。
+采用 [MIT License](LICENSE)。继承的旧版代码和模板保留原许可声明，详见 [第三方及历史许可](THIRD_PARTY_NOTICES.md)。已发布的 1.0.0 仍采用原 ISC 协议。
 
 默认代码上下文模式为 `repomix`，通过 `npx -y repomix` 执行；首次使用可能需要联网下载。显式设置 `contextMode: "source-index"` 可仅生成文件索引。已有向导与复用原料沿用已保存的模式。
 
