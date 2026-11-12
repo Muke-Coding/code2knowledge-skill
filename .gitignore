@@ -1,0 +1,8 @@
+node_modules/
+.code2knowledge/
+workspace/
+coverage/
+.DS_Store
+.env*
+
+*.tgz

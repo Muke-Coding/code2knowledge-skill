@@ -1,0 +1,51 @@
+{
+  "name": "@code2knowledge/skill",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Agent Skill for evidence-based multi-repository business knowledge.",
+  "license": "ISC",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "register": "node scripts/register.mjs",
+    "test": "node --test",
+    "check": "node --check scripts/setup.mjs && node --check scripts/knowledge.mjs && node --check scripts/register.mjs && node --check scripts/lib/knowledge.mjs && node --check scripts/lib/wizard.mjs && node --check scripts/lib/contract.mjs && node --check scripts/lib/notify.mjs && node --check scripts/lib/preflight.mjs && node --check scripts/lib/config.mjs && node --check scripts/postinstall.mjs",
+    "prepublishOnly": "npm test && npm run check",
+    "postinstall": "node scripts/postinstall.mjs"
+  },
+  "dependencies": {
+    "yaml": "^2.9.0"
+  },
+  "bin": {
+    "code2knowledge": "scripts/setup.mjs"
+  },
+  "files": [
+    "SKILL.md",
+    "agents/",
+    "assets/",
+    "references/",
+    "scripts/",
+    "LICENSE",
+    "README.md"
+  ],
+  "keywords": [
+    "agent-skills",
+    "claude-code",
+    "codex",
+    "knowledge-base",
+    "code-analysis"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Muke-Coding/code2knowledge-skill.git"
+  },
+  "homepage": "https://github.com/Muke-Coding/code2knowledge-skill#readme",
+  "bugs": {
+    "url": "https://github.com/Muke-Coding/code2knowledge-skill/issues"
+  }
+}

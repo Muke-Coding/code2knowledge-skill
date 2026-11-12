@@ -1,0 +1,21 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+import { parse } from 'yaml';
+import { ensureConfig } from '../scripts/lib/config.mjs';
+test('配置默认关闭、并发创建幂等、保留已有配置、dry-run 不写入', async t => {
+  const userHome = await fs.mkdtemp(path.join(os.tmpdir(), 'c2k-config-'));
+  t.after(() => fs.rm(userHome, { recursive: true, force: true }));
+  const target = await ensureConfig({ userHome, dryRun: true });
+  await assert.rejects(fs.access(target));
+  await Promise.all([ensureConfig({ userHome }), ensureConfig({ userHome })]);
+  const config = parse(await fs.readFile(target, 'utf8'));
+  assert.equal(config.notification.feishu.enabled, false);
+  assert.equal(config.notification.feishu.webhook_url, '');
+  if (process.platform !== 'win32') assert.equal((await fs.stat(target)).mode & 0o777, 0o600);
+  await fs.writeFile(target, 'existing: user-config\n');
+  await ensureConfig({ userHome });
+  assert.equal(await fs.readFile(target, 'utf8'), 'existing: user-config\n');
+});

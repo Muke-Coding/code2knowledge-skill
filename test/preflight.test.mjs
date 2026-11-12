@@ -1,0 +1,35 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+import { execFileSync } from 'node:child_process';
+import { syncMaster, requireDocumentChoice } from '../scripts/lib/preflight.mjs';
+
+test('资料必须显式选择；master 自动切换更新，脏代码和领先提交阻塞且保留', async t => {
+  assert.throws(() => requireDocumentChoice({}), /rawDocsDir/);
+  requireDocumentChoice({ rawDocsDir: '' });
+  requireDocumentChoice({ rawDocsDir: '/docs' });
+  const root = await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(), 'c2k-preflight-')));
+  t.after(() => fs.rm(root, { recursive: true, force: true }));
+  const repo = path.join(root, 'repo'), remote = path.join(root, 'remote.git'); await fs.mkdir(repo);
+  const git = (cwd, ...args) => execFileSync('git', args, { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
+  const commit = cwd => { git(cwd, 'add', '.'); git(cwd, '-c', 'user.name=Test', '-c', 'user.email=test@example.invalid', '-c', 'commit.gpgsign=false', 'commit', '-qm', 'change'); };
+  git(repo, 'init', '-b', 'master'); await fs.writeFile(path.join(repo, 'app'), 'one'); commit(repo);
+  git(root, 'clone', '--bare', repo, remote); git(repo, 'remote', 'add', 'origin', remote);
+  const upstream = path.join(root, 'upstream'); git(root, 'clone', remote, upstream);
+  await fs.writeFile(path.join(upstream, 'app'), 'two'); commit(upstream); git(upstream, 'push', 'origin', 'master');
+  git(repo, 'switch', '-c', 'feature');
+  const options = { workspace: path.join(root, 'workspace'), inspect: async dir => ({ worktreeStatus: git(dir, 'status', '--porcelain') ? 'dirty' : 'clean' }) };
+  assert.equal((await syncMaster([repo], options)).status, 'passed');
+  assert.equal(git(repo, 'branch', '--show-current'), 'master');
+  assert.equal(await fs.readFile(path.join(repo, 'app'), 'utf8'), 'two');
+  await fs.writeFile(path.join(repo, 'app'), 'local');
+  await assert.rejects(syncMaster([repo], options), /人工/);
+  assert.equal(await fs.readFile(path.join(repo, 'app'), 'utf8'), 'local');
+  commit(repo); const ahead = git(repo, 'rev-parse', 'HEAD');
+  await assert.rejects(syncMaster([repo], options), /人工/);
+  assert.equal(git(repo, 'rev-parse', 'HEAD'), ahead);
+  git(repo, 'remote', 'remove', 'origin');
+  await assert.rejects(syncMaster([repo], options), /人工/);
+});

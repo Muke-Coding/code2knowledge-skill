@@ -1,0 +1,6 @@
+# 保存到 ~/.code2knowledge/config.yml；不要将实际凭证提交 Git。
+notification:
+  feishu:
+    enabled: false
+    webhook_url: ""
+    secret: ""
