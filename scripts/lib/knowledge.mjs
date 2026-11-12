@@ -1,4 +1,4 @@
-import { requireDocumentChoice, syncMaster } from "./preflight.mjs";
+import { requireDocumentChoice, syncBranches } from "./preflight.mjs";
 import { notify } from "./notify.mjs";
 import { spawn } from "node:child_process";
 import fs from "node:fs/promises";
@@ -861,7 +861,7 @@ async function createCenterMaterial(payload, taskId = crypto.randomUUID()) {
   if (repoPaths.length === 0 && !rawDocsDir) throw new Error("请至少添加一个代码仓库或补充资料目录");
 
   requireDocumentChoice(payload);
-  const preflight = await syncMaster(repoPaths, { inspect: inspectRepository, workspace: workspaceDir });
+  const preflight = await syncBranches(repoPaths, { inspect: inspectRepository, workspace: workspaceDir, branch: payload.branch, branches: payload.branches });
   const repositories = [];
   for (const repoPath of repoPaths) repositories.push(await inspectRepository(repoPath));
   const duplicateNames = repositories.filter((repo, index) => repositories.findIndex((item) => slugify(item.name) === slugify(repo.name)) !== index);
@@ -904,6 +904,8 @@ async function createCenterMaterial(payload, taskId = crypto.randomUUID()) {
   const material = {
     version: 1,
     preflight,
+    branch: payload.branch || "master",
+    branches: payload.branches || {},
     documents,
     contextMode,
     materialId,
@@ -922,7 +924,7 @@ async function createCenterMaterial(payload, taskId = crypto.randomUUID()) {
 async function createDomainFromMaterial(payload, taskId = crypto.randomUUID()) {
   emit("task", { taskId, taskType: "domain", status: "running", step: "prepare-domain" });
   const material = await readMaterial(payload.materialDir);
-  await syncMaster(material.repositories.map(repo => repo.path), { inspect: inspectRepository, workspace: workspaceDir });
+  await syncBranches(material.repositories.map(repo => repo.path), { inspect: inspectRepository, workspace: workspaceDir, branch: material.branch, branches: material.branches });
   const freshness = await checkMaterial(material.materialDir);
   if (!freshness.reusable) throw new Error("原料已过期，请刷新原料后继续，保留历史证据");
   const productName = material.productName;

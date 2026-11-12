@@ -260,3 +260,20 @@ test("新向导与发现推荐默认启用 Repomix，允许显式选择文件索
   const restored = await invoke("wizard", { wizard: wizard.wizardId });
   assert.equal(restored.data.answers.contextMode, "source-index");
 });
+
+test('向导保存 main 并贯通准备、复用与续跑，不切回 master', async t => {
+  const { repo, invoke, save } = await fixture(t);
+  execFileSync('git', ['branch', '-m', 'main'], { cwd: repo });
+  execFileSync('git', ['push', 'origin', 'main'], { cwd: repo, stdio: 'pipe' });
+  const wizard = await save({ intent: 'new', answers: { productName: 'Order', domainName: 'Refund', domainScope: '退款', repoDirs: [repo], rawDocsDir: '', outputRootDir: repo, contextMode: 'source-index', branch: 'main' } });
+  const started = await invoke('wizard-start', { wizard: wizard.wizardId });
+  assert.equal(started.code, 0, JSON.stringify(started.data));
+  const material = JSON.parse(await fs.readFile(path.join(started.data.result.materialDir, 'material.json'), 'utf8'));
+  assert.equal(material.branch, 'main');
+  const reuse = await save({ intent: 'reuse', materialDir: started.data.result.materialDir, answers: { domainName: 'Review', domainScope: '审核', outputRootDir: repo } });
+  assert.equal(reuse.answers.branch, 'main');
+  assert.equal((await invoke('wizard-start', { wizard: reuse.wizardId })).code, 0);
+  const resume = await save({ intent: 'resume', runDir: started.data.result.runDir });
+  assert.equal((await invoke('wizard-start', { wizard: resume.wizardId })).code, 0);
+  assert.equal(execFileSync('git', ['branch', '--show-current'], { cwd: repo, encoding: 'utf8' }).trim(), 'main');
+});

@@ -1,6 +1,6 @@
 {
   "name": "@code2knowledge/skill",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "description": "Agent Skill for evidence-based multi-repository business knowledge.",
   "license": "MIT",

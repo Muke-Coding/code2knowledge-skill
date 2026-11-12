@@ -1,4 +1,4 @@
-import { syncMaster } from "./preflight.mjs";
+import { syncBranches } from "./preflight.mjs";
 import fs from "node:fs/promises";
 import path from "node:path";
 import crypto from "node:crypto";
@@ -9,7 +9,7 @@ import {
 
 const wizardRoot = path.join(workspaceDir, "wizards");
 const intents = new Set(["new", "reuse", "resume", "material"]);
-const textFields = ["productName", "productSlug", "domainName", "domainSlug", "domainScope", "rawDocsDir", "outputRootDir", "contextMode"];
+const textFields = ["productName", "productSlug", "domainName", "domainSlug", "domainScope", "rawDocsDir", "outputRootDir", "contextMode", "branch"];
 const byRecent = (a, b) => String(b.updatedAt || b.createdAt || "").localeCompare(String(a.updatedAt || a.createdAt || ""));
 const isMissing = (value) => typeof value !== "string" || !value.trim();
 
@@ -75,7 +75,7 @@ export async function discoverWorkspace() {
   const limit = 8;
   return {
     workspaceDir, projectDir: process.cwd(), currentRepository, menu,
-    defaults: { outputRootDir: process.cwd(), rawDocsDir: "", contextMode: "repomix" },
+    defaults: { outputRootDir: process.cwd(), rawDocsDir: "", contextMode: "repomix", branch: "master" },
     products: [...products.values()],
     materials: materials.slice(0, limit).map((item) => ({ materialId: item.materialId, materialDir: item.materialDir,
       productName: item.productName, productSlug: item.productSlug, createdAt: item.createdAt, repositories: item.repositories.map((repo) => repo.name), freshness: "unchecked" })),
@@ -111,12 +111,14 @@ export async function saveWizard(input) {
   const patch = input.answers || {};
   if (typeof patch !== "object" || Array.isArray(patch)) throw new Error("answers 必须为对象");
   for (const [key, value] of Object.entries(patch)) {
-    if (!textFields.includes(key) && key !== "repoDirs") throw new Error(`未知向导字段：${key}`);
-    if (key === "repoDirs") {
+    if (!textFields.includes(key) && key !== "repoDirs" && key !== "branches") throw new Error(`未知向导字段：${key}`);
+    if (key === "branches") {
+      if (!value || typeof value !== "object" || Array.isArray(value) || Object.values(value).some(branch => typeof branch !== "string" || !branch.trim())) throw new Error("branches 必须为仓库绝对路径到分支名的映射");
+    } else if (key === "repoDirs") {
       if (!Array.isArray(value) || value.some((dir) => typeof dir !== "string" || !dir.trim())) throw new Error("repoDirs 必须为路径列表");
     } else if (typeof value !== "string") throw new Error(`${key} 必须为文本`);
   }
-  const answers = { contextMode: "repomix", ...previous?.answers, ...patch };
+  const answers = { contextMode: "repomix", branch: "master", ...previous?.answers, ...patch };
   // A domain change is a new scope decision unless the same answer supplies its scope.
   if (previous?.answers.domainName && patch.domainName !== undefined &&
       patch.domainName !== previous.answers.domainName && patch.domainScope === undefined) delete answers.domainScope;
@@ -134,13 +136,14 @@ export async function saveWizard(input) {
   if (!isMissing(answers.outputRootDir)) answers.outputRootDir = path.resolve(previous?.projectDir || process.cwd(), answers.outputRootDir);
   else delete answers.outputRootDir;
   if (answers.rawDocsDir) answers.rawDocsDir = path.resolve(previous?.projectDir || process.cwd(), answers.rawDocsDir);
+  if (answers.branches) answers.branches = Object.fromEntries(Object.entries(answers.branches).map(([dir, branch]) => [path.resolve(previous?.projectDir || process.cwd(), dir), branch]));
   if (answers.repoDirs) answers.repoDirs = [...new Set(answers.repoDirs.map((dir) => path.resolve(previous?.projectDir || process.cwd(), dir)))];
   const materialDir = input.materialDir ?? previous?.materialDir;
   const runDir = input.runDir ?? previous?.runDir;
   if (intent === "reuse" && materialDir) {
     const material = await readMaterial(materialDir);
     Object.assign(answers, { productName: material.productName, productSlug: assertBusinessSlug(material.productSlug, "productSlug"), repoDirs: material.repositories.map((repo) => repo.path),
-      rawDocsDir: material.rawDocsDir || "", contextMode: material.contextMode || "repomix" });
+      branch: material.branch || "master", branches: material.branches || {}, rawDocsDir: material.rawDocsDir || "", contextMode: material.contextMode || "repomix" });
   }
   if (intent === "resume" && runDir) {
     const run = await readRun(runDir);
@@ -178,7 +181,8 @@ export async function startWizard(id) {
   const wizard = await readWizard(id);
   if (wizard.status === "started") {
     const result = wizard.intent === "material" ? await readMaterial(wizard.materialDir) : await readRun(wizard.runDir);
-    await syncMaster((await readMaterial(result.materialDir)).repositories.map(repo => repo.path), { inspect: inspectRepository, workspace: workspaceDir });
+    const material = await readMaterial(result.materialDir);
+    await syncBranches(material.repositories.map(repo => repo.path), { inspect: inspectRepository, workspace: workspaceDir, branch: material.branch, branches: material.branches });
     const freshness = await checkMaterial(result.materialDir);
     if (!freshness.reusable) throw new Error("原料已过期，请刷新后继续");
     return { wizard, result, alreadyStarted: true };
@@ -188,7 +192,8 @@ export async function startWizard(id) {
   let result;
   if (wizard.intent === "resume") {
     result = await readRun(wizard.runDir);
-    await syncMaster((await readMaterial(result.materialDir)).repositories.map(repo => repo.path), { inspect: inspectRepository, workspace: workspaceDir });
+    const material = await readMaterial(result.materialDir);
+    await syncBranches(material.repositories.map(repo => repo.path), { inspect: inspectRepository, workspace: workspaceDir, branch: material.branch, branches: material.branches });
     if (!(await checkMaterial(result.materialDir)).reusable) throw new Error("原料已过期，请刷新后继续");
   }
   else if (wizard.intent === "material") result = await createCenterMaterial(wizard.answers);

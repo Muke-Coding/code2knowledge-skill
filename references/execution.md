@@ -14,20 +14,17 @@ npm 安装 Skill 或执行 npm ci 只安装包声明的依赖，不代表 Repomi
 
 设 `SKILL` 是读取本文件的 Skill 绝对路径，`PROJECT` 是任务启动目录，`WORKSPACE` 默认 `PROJECT/.code2knowledge`。脚本参数以独立参数传递，路径包含空格也必须正确引用。不要用用户输入拼接 shell 代码。每次命令明确传 `--workspace`，续跑保持相同值。
 
-## 正式逆向前：master 分支检查（必须执行）
+## 准备原料前：选择分析分支并安全同步
 
-此门禁已由 preflight.mjs 强制执行：prepare/material 创建原料、domain 复用原料、wizard-start 启动或恢复任务都会同步 master，失败抛错并保存工作区 preflight/ 记录；飞书启用时自动尝试人工介入通知。确定所有依赖服务仓库和文档选择后、首次生成代码原料前执行；复用原料、恢复尚未完成分析的任务也应在再次分析前执行。只读 discover 不需要切换分支。仅文档任务跳过此步骤。
+master 是缺省推荐值，不是必须使用的分支。Agent 先只读查看仓库当前分支、origin/HEAD 和已有分支，再用结构化选择询问分析分支，提供 master、实际 main/默认分支及自定义入口；用户已明确指定时不重复问。没有 master 的仓库推荐实际默认分支，不因没有 master 要求人工修复。仅文档任务跳过。
 
-先告知“将检查所有依赖服务代码，自动切换到 master 并拉取最新版本，失败时停止请求人工处理”。对每个仓库用独立参数调用 Git，工作目录设为该仓库，不拼接用户路径到 shell 代码：
+输入支持 `branch: "main"` 设置所有仓库公共目标，也支持 `branches: {"/absolute/service-a": "release/v2", "/absolute/service-b": "main"}` 逐仓覆盖。未传 branch 时底层缺省 master，以兼容旧调用；这不是拒绝其他分支的限制。Agent 必须先说明并保存用户选定分支，不静默切换。相对仓库路径在向导中解析为绝对路径。
 
-1. 记录原分支及 HEAD；检查是否为 Git 仓库，检查 `git status --porcelain` 和 merge/rebase/cherry-pick 等进行中操作。存在用户未提交或未跟踪改动、子模块改动、未完成操作时停止，不擅自 stash、提交或清理。工作区内工具自身生成的 `.code2knowledge/` 内容按既有 inspectRepository 排除规则判断，不要求用户删除工具产物。
-2. 执行 `git fetch origin`，成功后确认 `refs/remotes/origin/master` 存在。缺少 origin 或远程 master 时停止，不擅自改用 main 或其他远程，也不能拿旧缓存代替最新远程状态。
-3. 本地 master 存在时执行 `git switch master`；不存在时执行 `git switch --track -c master origin/master`。然后执行 `git pull --ff-only origin master`，禁止 merge commit、rebase、reset --hard 或强制切换。
-4. 比较 `git rev-parse HEAD` 与 `git rev-parse refs/remotes/origin/master`，必须相等且当前分支确为 master、工作区仍 clean 才通过。本地 master 即使仅领先远程也不能视为最新基线，不删除本地提交，请人工处理。记录检查时间、原分支、原 commit、最终 commit、远程和结果到任务计划/检查记录；“最新”指本次成功同步的远程快照。
+脚本先检查全部工作区 clean 和未完成 Git 操作；然后逐仓 fetch origin 的选定分支、检查快进可行性、切换本地分支（缺失时建立远程跟踪分支）、pull --ff-only，核对 HEAD 与 origin/<选定分支> 一致。选定分支不存在、脏代码、本地领先/分叉、认证或网络失败时停止，不 stash、reset、强制覆盖或删除提交。重新选择可用分支不属于失败绕过；必须重新准备对应原料。
 
-先对全部仓库做只读工作区检查再逐仓同步，减少部分更新。任意一步失败：停止原料准备与正式分析，向用户列出失败仓库、失败步骤、实际 Git 错误、已完成切换的仓库和当前状态，明确请求人工处理后继续。不要自动回滚已更新仓库或循环重试。用户处理后重新检查全部仓库。
+prepare/material、domain 和 wizard-start 的准备/复用/恢复路径均执行同步检查。记录保存到工作区 preflight/，每仓包含目标分支、原分支及 commit、同步后 commit 与结果；失败时启用的通知会尝试请求人工介入。用户处理后重新检查，已经更新的仓库不自动回滚。
 
-全部通过后再创建原料，commit 必须取更新后的真实 HEAD。复用/续跑时，如果新 HEAD 与原料记录不同，旧原料和旧产物不得直接续写或冒充最新；按过期原料流程让用户选择刷新或处理已有任务，保留原料与历史证据。用户明确要求分析历史分支/commit 时按该要求执行并标明，不能把历史分析报告成最新 master。
+原料保存 branch、branches 和 preflight。复用或恢复沿用该原料的分支，历史无字段记录缺省 master；Agent 应展示并允许用户选择改分支、创建新原料。同步后 commit 改变则原料过期，禁止用新 HEAD 冒充历史证据。
 
 ## 选择向导接口（优先使用）
 
@@ -68,7 +65,7 @@ node "$SKILL/scripts/knowledge.mjs" wizard --input "$WORKSPACE/answer.json" --wo
 }
 ```
 
-复用时中心/仓库及资料自动从 material 带入。新建原料时必须先完成“是否添加文档资料”的结构化选择；选择添加后收集本地目录写入 rawDocsDir，选择不添加才保存空字符串，不能把默认空值或 missingFields 为空视为已经回答。业务域名、边界说明和导出位置通过向导明确收集，outputRootDir 只有用户选定后才保存，不能直接复制发现接口的推荐值冒充选择。收集导出位置必须沿用宿主结构化选择工具，提供推荐目录与自定义入口；普通文本编号只用于工具确实不可用的兜底，详细规则见 wizard.md。rawDocsDir 必须显式提交：不添加传空字符串，添加传目录；新向导缺少它时 missingFields 返回 rawDocsDir，启动及底层原料创建均拒绝缺省值。`answers` 仅支持 `productName`、`productSlug`、`domainName`、`domainSlug`、`domainScope`、`repoDirs`、`rawDocsDir`、`outputRootDir` 和 `contextMode`；repoDirs 为路径数组，其余为文本。中文名称需由 Agent 在命名选择中一并推荐英文标识，用户选用后保存；纯英文名称可自动规范为小写连字符标识。缺少中文名称对应的英文标识时，missingFields 会返回 productSlug / domainSlug，禁止猜测翻译后直接开始。
+复用时中心/仓库及资料自动从 material 带入。新建原料时必须先完成“是否添加文档资料”的结构化选择；选择添加后收集本地目录写入 rawDocsDir，选择不添加才保存空字符串，不能把默认空值或 missingFields 为空视为已经回答。业务域名、边界说明和导出位置通过向导明确收集，outputRootDir 只有用户选定后才保存，不能直接复制发现接口的推荐值冒充选择。收集导出位置必须沿用宿主结构化选择工具，提供推荐目录与自定义入口；普通文本编号只用于工具确实不可用的兜底，详细规则见 wizard.md。rawDocsDir 必须显式提交：不添加传空字符串，添加传目录；新向导缺少它时 missingFields 返回 rawDocsDir，启动及底层原料创建均拒绝缺省值。`answers` 仅支持 `productName`、`productSlug`、`domainName`、`domainSlug`、`domainScope`、`repoDirs`、`rawDocsDir`、`outputRootDir` 、`branch`、`branches` 和 `contextMode`；repoDirs 为路径数组，branches 为仓库绝对路径到分支名的对象，其余为文本。中文名称需由 Agent 在命名选择中一并推荐英文标识，用户选用后保存；纯英文名称可自动规范为小写连字符标识。缺少中文名称对应的英文标识时，missingFields 会返回 productSlug / domainSlug，禁止猜测翻译后直接开始。
 
 ```bash
 node "$SKILL/scripts/knowledge.mjs" wizard --wizard "$WIZARD_ID" --workspace "$WORKSPACE"

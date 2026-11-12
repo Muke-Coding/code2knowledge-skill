@@ -4,7 +4,7 @@ import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { syncMaster, requireDocumentChoice } from '../scripts/lib/preflight.mjs';
+import { syncBranches, requireDocumentChoice } from '../scripts/lib/preflight.mjs';
 
 test('资料必须显式选择；master 自动切换更新，脏代码和领先提交阻塞且保留', async t => {
   assert.throws(() => requireDocumentChoice({}), /rawDocsDir/);
@@ -21,15 +21,34 @@ test('资料必须显式选择；master 自动切换更新，脏代码和领先�
   await fs.writeFile(path.join(upstream, 'app'), 'two'); commit(upstream); git(upstream, 'push', 'origin', 'master');
   git(repo, 'switch', '-c', 'feature');
   const options = { workspace: path.join(root, 'workspace'), inspect: async dir => ({ worktreeStatus: git(dir, 'status', '--porcelain') ? 'dirty' : 'clean' }) };
-  assert.equal((await syncMaster([repo], options)).status, 'passed');
+  assert.equal((await syncBranches([repo], options)).status, 'passed');
   assert.equal(git(repo, 'branch', '--show-current'), 'master');
   assert.equal(await fs.readFile(path.join(repo, 'app'), 'utf8'), 'two');
   await fs.writeFile(path.join(repo, 'app'), 'local');
-  await assert.rejects(syncMaster([repo], options), /人工/);
+  await assert.rejects(syncBranches([repo], options), /人工/);
   assert.equal(await fs.readFile(path.join(repo, 'app'), 'utf8'), 'local');
   commit(repo); const ahead = git(repo, 'rev-parse', 'HEAD');
-  await assert.rejects(syncMaster([repo], options), /人工/);
+  await assert.rejects(syncBranches([repo], options), /人工/);
   assert.equal(git(repo, 'rev-parse', 'HEAD'), ahead);
   git(repo, 'remote', 'remove', 'origin');
-  await assert.rejects(syncMaster([repo], options), /人工/);
+  await assert.rejects(syncBranches([repo], options), /人工/);
+});
+
+test('没有 master 的仓库可选择 main，并支持逐仓 feature 分支覆盖', async t => {
+  const root = await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(), 'c2k-branch-')));
+  t.after(() => fs.rm(root, { recursive: true, force: true }));
+  const repo = path.join(root, 'repo'); await fs.mkdir(repo);
+  const git = (...args) => execFileSync('git', args, { cwd: repo, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
+  git('init', '-b', 'main'); await fs.writeFile(path.join(repo, 'app'), 'main'); git('add', '.');
+  git('-c', 'user.name=Test', '-c', 'user.email=test@example.invalid', '-c', 'commit.gpgsign=false', 'commit', '-qm', 'fixture');
+  git('branch', 'feature/refund'); git('clone', '--bare', repo, path.join(root, 'remote.git')); git('remote', 'add', 'origin', path.join(root, 'remote.git'));
+  const options = { workspace: path.join(root, 'workspace'), branch: 'main', inspect: async () => ({ worktreeStatus: git('status', '--porcelain') ? 'dirty' : 'clean' }) };
+  const main = await syncBranches([repo], options);
+  assert.equal(main.repositories[0].branch, 'main');
+  assert.equal(git('branch', '--show-current'), 'main');
+  const feature = await syncBranches([repo], { ...options, branches: { [repo]: 'feature/refund' } });
+  assert.equal(feature.repositories[0].branch, 'feature/refund');
+  assert.equal(git('branch', '--show-current'), 'feature/refund');
+  await assert.rejects(syncBranches([repo], { ...options, branch: '@{-1}' }), /分支检查失败/);
+  assert.equal(git('branch', '--show-current'), 'feature/refund');
 });
