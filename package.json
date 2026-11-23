@@ -9,13 +9,13 @@
   },
   "scripts": {
     "register": "node scripts/register.mjs",
-    "test": "node --test",
-    "check": "node --check scripts/setup.mjs && node --check scripts/knowledge.mjs && node --check scripts/register.mjs && node --check scripts/lib/knowledge.mjs && node --check scripts/lib/wizard.mjs && node --check scripts/lib/contract.mjs && node --check scripts/lib/notify.mjs && node --check scripts/lib/preflight.mjs && node --check scripts/lib/config.mjs && node --check scripts/postinstall.mjs",
+    "test": "node scripts/check-kernel.mjs && node --test",
+    "check": "node --check scripts/setup.mjs && node --check scripts/knowledge.mjs && node --check scripts/register.mjs && node --check scripts/lib/knowledge.mjs && node --check scripts/lib/wizard.mjs && node --check scripts/lib/contract.mjs && node --check scripts/lib/notify.mjs && node --check scripts/lib/preflight.mjs && node --check scripts/lib/config.mjs && node --check scripts/postinstall.mjs && node scripts/check-kernel.mjs",
     "prepublishOnly": "npm test && npm run check",
     "postinstall": "node scripts/postinstall.mjs"
   },
   "dependencies": {
-    "yaml": "^2.9.0"
+    "yaml": "2.9.0"
   },
   "bin": {
     "code2knowledge": "scripts/setup.mjs"
@@ -28,7 +28,9 @@
     "scripts/",
     "LICENSE",
     "README.md",
-    "THIRD_PARTY_NOTICES.md"
+    "THIRD_PARTY_NOTICES.md",
+    "kernel/",
+    "kernel-manifest.json"
   ],
   "keywords": [
     "agent-skills",

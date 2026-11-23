@@ -1,0 +1,33 @@
+{
+  "name": "@code2knowledge/reverse-kernel",
+  "version": "0.1.0",
+  "type": "module",
+  "license": "MIT",
+  "description": "Code2Knowledge shared knowledge contracts, templates and analysis specifications.",
+  "engines": {
+    "node": ">=20"
+  },
+  "exports": {
+    ".": {
+      "types": "./src/index.d.mts",
+      "import": "./src/index.mjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src/",
+    "assets/",
+    "references/",
+    "LICENSE",
+    "README.md",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "scripts": {
+    "build": "node --check src/index.mjs && node --check src/contract.mjs",
+    "typecheck": "tsc --noEmit --strict --module NodeNext --moduleResolution NodeNext --target ES2022 src/index.d.mts",
+    "test": "node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "yaml": "2.9.0"
+  }
+}

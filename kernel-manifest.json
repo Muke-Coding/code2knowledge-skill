@@ -1,0 +1,32 @@
+{
+  "generated": "scripts/sync-skill-kernel.mjs",
+  "kernelVersion": "0.1.0",
+  "contractVersion": "2.0",
+  "files": {
+    "assets/project-context/ontology/concept-types.yaml": "70a74fd3142ea124395fe1b1b66d4e51fc5fc386673d59254d22799c76536c0d",
+    "assets/project-context/ontology/node-types.yaml": "c2914ff0604a38b5a6242e853716eae9a37340c9f984472df77ad4edb14e7c8b",
+    "assets/project-context/ontology/relation-types.yaml": "da90f36073106128a8c39fa9f1436d94bfd6c415532d5b57e623d3caee78de86",
+    "assets/project-context/ontology/schema.md": "92b6ff5e64b1098072a8a88d13ed937f5946d3974294f55d7fa601fd159e7e88",
+    "assets/project-context/rules/sync-rules.md": "f39bdc5bd8b6398012b553083dd978150adfc34e49ed90b926d41a4bcbae297b",
+    "assets/project-context/rules/validation-rules.yaml": "03f09fd51da110a01570464b813f907a0ba80dc16e19fa7fb7d4aaa6f98b3102",
+    "kernel/assets/ontology/concept-types.yaml": "70a74fd3142ea124395fe1b1b66d4e51fc5fc386673d59254d22799c76536c0d",
+    "kernel/assets/ontology/node-types.yaml": "c2914ff0604a38b5a6242e853716eae9a37340c9f984472df77ad4edb14e7c8b",
+    "kernel/assets/ontology/relation-types.yaml": "da90f36073106128a8c39fa9f1436d94bfd6c415532d5b57e623d3caee78de86",
+    "kernel/assets/ontology/schema.md": "92b6ff5e64b1098072a8a88d13ed937f5946d3974294f55d7fa601fd159e7e88",
+    "kernel/assets/rules/sync-rules.md": "f39bdc5bd8b6398012b553083dd978150adfc34e49ed90b926d41a4bcbae297b",
+    "kernel/assets/rules/validation-rules.yaml": "03f09fd51da110a01570464b813f907a0ba80dc16e19fa7fb7d4aaa6f98b3102",
+    "kernel/LICENSE": "b5230cfef0779619304606071ced5417db06cb779eac8f35d5cbf531e805ebe1",
+    "kernel/package.json": "46c5baa6539e5df565c2afe0841d24cf9e6009fc78aa7a225814ad569f09926a",
+    "kernel/README.md": "1c34c91f33c52511933dac1ab801f9a43a727f85d82fae030601ca8623e0933a",
+    "kernel/references/analysis.md": "ebeebc23a1d3d9861d8b44619b819881e0930e51b7d0c5ee8b75806f3df753cc",
+    "kernel/references/downstream-contract.md": "db84f4f570969d214df00c3d321f35b3ea145ec6a6177b0cb2a682db2d6d3d03",
+    "kernel/references/knowledge-model.md": "f8cfba0a640a98621eb1caa566457ddaaf67946b51fb8c18d00f3da7e105af6e",
+    "kernel/src/contract.mjs": "f32ac4c2b221613f627d0904e23273ddc912e821d6c858d6626c39ed6c75f0f4",
+    "kernel/src/index.d.mts": "1fbbc4312274215964071479bc653791275a019a9ab93de44dcad514e21db539",
+    "kernel/src/index.mjs": "c45f76abed261cd5bfe160ef3935e3931586c1ecaa2dbd5c352c566ebf87da24",
+    "kernel/THIRD_PARTY_NOTICES.md": "989dc6d36df31a91e208dd861bcaed1fda747c7bed541865aa56a3440c9b87f9",
+    "references/analysis.md": "ebeebc23a1d3d9861d8b44619b819881e0930e51b7d0c5ee8b75806f3df753cc",
+    "references/downstream-contract.md": "db84f4f570969d214df00c3d321f35b3ea145ec6a6177b0cb2a682db2d6d3d03",
+    "references/knowledge-model.md": "f8cfba0a640a98621eb1caa566457ddaaf67946b51fb8c18d00f3da7e105af6e"
+  }
+}

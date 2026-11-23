@@ -1,3 +1,4 @@
+/** 独立Skill任务编排入口；保留选择、Git、原料和通知，知识模板及校验仅经共享内核兼容入口调用。 */
 import { requireDocumentChoice, syncBranches } from "./preflight.mjs";
 import { notify } from "./notify.mjs";
 import { spawn } from "node:child_process";
@@ -7,7 +8,7 @@ import path from "node:path";
 import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { parse as parseYaml } from "yaml";
-import { schemaVersion, fullCommit, sha256, makeContext, existingIdentities, writeBusinessTemplates, validateContract, assetFiles } from "./contract.mjs";
+import { schemaVersion, fullCommit, sha256, makeContext, existingIdentities, writeBusinessTemplates, writeMaintenanceTemplates, validateContract, assetFiles } from "./contract.mjs";
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 function canonicalPath(value) {
@@ -24,7 +25,6 @@ function canonicalPath(value) {
   }
 }
 const workspaceDir = canonicalPath(process.env.C2K_WORKSPACE || path.join(process.cwd(), ".code2knowledge"));
-const projectContextTemplateDir = path.join(rootDir, "assets", "project-context");
 const runRootDir = path.join(workspaceDir, "runs");
 const materialRootDir = path.join(workspaceDir, "materials");
 const knowledgeRootDir = process.cwd();
@@ -371,19 +371,19 @@ async function checkMaterial(materialDir) {
   return { materialDir: material.materialDir, reusable: repositories.every((repo) => repo.matches) && documents.every((doc) => doc.matches), repositories, documents };
 }
 
+/**
+ * @param draftsDir 本次已选任务草稿目录，不是最终发布目录。
+ * @param domainName 业务域显示名称。
+ * @param domainSlug 稳定业务域目录标识。
+ * @param verifiedCommits 已有服务到固定提交映射；缺省为空，不据此自动认证业务结论。
+ * @param options 仓库快照、产品标识与可选contractContext；缺省使用显式参数生成待审核上下文。
+ * @returns 生成缺失业务骨架与Skill私有分析计划；已有草稿和证据保留，不调用模型或通知。
+ * @throws {Error} 模板、目录或任务文件不可读写时停止准备。
+ */
 async function writeDraftTemplates(draftsDir, domainName, domainSlug, verifiedCommits = {}, options = {}) {
   await fs.mkdir(draftsDir, { recursive: true });
   const domainDir = path.join(draftsDir, "domains");
-  await fs.cp(path.join(projectContextTemplateDir, "ontology"), path.join(draftsDir, "ontology"), {
-    recursive: true,
-    force: false,
-    errorOnExist: false,
-  });
-  await fs.cp(path.join(projectContextTemplateDir, "rules"), path.join(draftsDir, "rules"), {
-    recursive: true,
-    force: false,
-    errorOnExist: false,
-  });
+  await writeMaintenanceTemplates(draftsDir);
   await fs.mkdir(path.join(draftsDir, "graph", "curated"), { recursive: true });
   await fs.mkdir(path.join(draftsDir, "mappings"), { recursive: true });
   const evidenceDir = path.join(draftsDir, "evidence");
