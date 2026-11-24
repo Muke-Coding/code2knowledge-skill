@@ -1,5 +1,5 @@
 {
-  "name": "@code2knowledge/reverse-kernel",
+  "name": "@code2knowledge/kernel",
   "version": "0.1.0",
   "type": "module",
   "license": "MIT",
@@ -25,9 +25,22 @@
   "scripts": {
     "build": "node --check src/index.mjs && node --check src/contract.mjs",
     "typecheck": "tsc --noEmit --strict --module NodeNext --moduleResolution NodeNext --target ES2022 src/index.d.mts",
-    "test": "node --test test/*.test.mjs"
+    "test": "node --test test/*.test.mjs",
+    "prepublishOnly": "npm run build && npm run typecheck && npm test"
   },
   "dependencies": {
     "yaml": "2.9.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Muke-Coding/code2knowledge-skill.git",
+    "directory": "packages/reverse-kernel"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3"
   }
 }

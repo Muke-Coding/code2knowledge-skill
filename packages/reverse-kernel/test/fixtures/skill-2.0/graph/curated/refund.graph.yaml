@@ -1,0 +1,37 @@
+meta:
+  schema_version: "2.0"
+  knowledge_id: K:fixture:refund:code_graph
+  product: fixture
+  domain: refund
+  systems:
+    - fixture-core
+  knowledge_type: code_graph
+  generated_at: 2026-11-20T11:18:23.321Z
+  review_status: pending
+  owner: null
+  lifecycle: current
+  sources:
+    - kind: code
+      repository: fixture-core
+      commit: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      worktree_status: clean
+  verified_commits:
+    fixture-core: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+nodes:
+  - id: FUNC:fixture-core:refund
+    type: ServiceClass
+    service: fixture-core
+    path: fixture-core/refund.js
+    desc: 退款实现
+    evidence:
+      - kind: code
+        repository: fixture-core
+        commit: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        path: refund.js
+        symbol: refund
+        lines:
+          - 1
+          - 1
+        supports: refund 拒绝非正数金额
+        node_id: FUNC:fixture-core:refund
+edges: []

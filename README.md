@@ -381,6 +381,10 @@ Agent 在生成代码原料及正式分析前，逐一检查所有依赖服务�
 
 Skill继续独立运行，由宿主Agent完成选择向导与分析；企业平台使用独立运行时，不执行本Skill向导。二者复用同一逆向内核的模板、知识契约2.0、分析规范及校验，不共享凭证、通知或任务权限。
 
-`kernel/`是从共享内核唯一源码生成的自包含发行镜像，`scripts/lib/contract.mjs`只保留兼容转发。`kernel-manifest.json`记录版本与全部生成文件摘要，`npm test`、`npm run check`会检查镜像漂移。三份规范（analysis、knowledge-model、downstream-contract）与ontology/rules同样受门禁保护；请在共享内核源码修改后，用平台维护工具 `scripts/sync-skill-kernel.mjs --skill-root <本Skill源码目录> --write` 同步，并执行双入口包兼容验收。禁止只修改镜像或生成结果。
+内核唯一源码与测试位于本仓库 `packages/reverse-kernel/`，独立发布为 `@code2knowledge/kernel`。Skill 1.0.3通过精确npm依赖0.1.0调用公开API，不再携带运行代码镜像。三份规范及本体/规则仍随Skill提供给宿主阅读，由已安装内核生成并通过清单校验。
 
-内核代码版本0.1.0、知识契约版本2.0与Skill发行版本独立。当前本地重构尚未发布npm，不会自动修改从npm registry安装的1.0.2副本；链接源码的本地入口会随源码使用新内核。YAML解析器固定2.9.0以保证两入口行为一致；原MIT与历史ISC许可保留。
+维护：`npm ci --ignore-scripts`，`node scripts/sync-skill-kernel.mjs --skill-root . --write`，`npm run check:source`，`npm test`，`npm run check`。只修改内核源码不会影响当前Skill，须先发布内核新版本再显式升级依赖与锁文件；禁止仅改生成规范。
+
+内核独立发布在 `packages/reverse-kernel` 执行build、typecheck、test和 `npm publish --access public`，Skill发布则在本仓库根执行。两者版本独立；Skill的prepublishOnly检查生成资源与测试。内核已发布0.1.0，MIT和历史ISC许可保留。平台也依赖精确npm版本，不安装Skill、不执行向导，不再保存同名workspace副本。
+
+本机源码链接依赖本目录node_modules；更新后先npm ci。npm正常安装会自动安装内核，不能用 `--ignore-scripts` 安装来宣称注册/配置钩子已执行。

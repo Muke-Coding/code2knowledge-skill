@@ -1,2 +1,2 @@
-/** 独立Skill兼容入口；所有契约与模板由共享内核生成，保留既有内部引用路径，不加载模型或通知。 */
-export * from "../../kernel/src/index.mjs";
+/** 独立Skill契约兼容入口；仅调用已发布内核公开API，不执行模型、配置或通知。 */
+export * from "@code2knowledge/kernel";

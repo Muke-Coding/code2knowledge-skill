@@ -1,0 +1,67 @@
+meta:
+  schema_version: "2.0"
+  knowledge_id: K:fixture:refund:flow_definitions
+  product: fixture
+  domain: refund
+  systems:
+    - fixture-core
+  knowledge_type: flow_definitions
+  generated_at: 2026-11-20T11:18:23.321Z
+  review_status: pending
+  owner: null
+  lifecycle: current
+  sources:
+    - kind: code
+      repository: fixture-core
+      commit: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      worktree_status: clean
+flows:
+  - id: FLOW:refund:refund
+    name: 退款局部处理
+    trigger: 调用 refund
+    scope: 退款金额检查与返回值，不包含外部支付
+    preconditions:
+      - 调用者传入金额
+    steps:
+      - 检查金额
+      - 返回 refunded
+    data_changes:
+      - 局部代码不持久化数据
+    async_events:
+      - 局部代码未包含异步事件
+    failures:
+      - 非正数抛错
+    compensation:
+      - 局部代码无副作用，无需回滚
+    capabilities:
+      - CAP:refund:refund
+    rules:
+      - RULE:refund:positive
+    tests:
+      discovered: []
+      read: []
+      executions: []
+      limitations:
+        - 未发现、阅读或执行测试；仅证明局部源码行为
+    claim_type: code_fact
+    status: VERIFIED
+    review_status: pending
+    lifecycle: current
+    evidence:
+      - kind: code
+        repository: fixture-core
+        commit: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        path: refund.js
+        symbol: refund
+        lines:
+          - 1
+          - 1
+        supports: refund 检查金额后返回结果
+        node_id: FUNC:fixture-core:refund
+    applicability:
+      conditions:
+        - 调用 refund，金额为正数
+      versions:
+        - fixture-core@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      limitations:
+        - 仅核实源码局部行为，未验证生产配置及完整业务口径

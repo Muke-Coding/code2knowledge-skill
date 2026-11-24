@@ -1,0 +1,398 @@
+{
+  "source": "@code2knowledge/skill@1.0.2",
+  "contractSha256": "5f6ae369a58e0b60e908066a647146c6136c1ae6c9158ad689005f0f0bbc001a",
+  "input": {
+    "product": "fixture-core",
+    "domain": "refund",
+    "repositories": [
+      {
+        "name": "order-core",
+        "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "worktreeStatus": "clean"
+      }
+    ],
+    "documents": [
+      {
+        "document_id": "prd",
+        "path": "prd.md",
+        "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    ],
+    "generatedAt": "2026-11-01T00:00:00.000Z"
+  },
+  "context": {
+    "schema_version": "2.0",
+    "product": "fixture-core",
+    "domain": "refund",
+    "generated_at": "2026-11-01T00:00:00.000Z",
+    "systems": [
+      "order-core"
+    ],
+    "sources": [
+      {
+        "kind": "code",
+        "repository": "order-core",
+        "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "worktree_status": "clean"
+      },
+      {
+        "kind": "document",
+        "document_id": "prd",
+        "path": "prd.md",
+        "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    ],
+    "identities": {}
+  },
+  "templates": {
+    "domains/capabilities.yaml": "meta:\n  schema_version: \"2.0\"\n  knowledge_id: K:fixture-core:refund:capabilities\n  product: fixture-core\n  domain: refund\n  systems:\n    - order-core\n  knowledge_type: capabilities\n  generated_at: 2026-11-01T00:00:00.000Z\n  review_status: pending\n  owner: null\n  lifecycle: current\n  sources:\n    - kind: code\n      repository: order-core\n      commit: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n      worktree_status: clean\n    - kind: document\n      document_id: prd\n      path: prd.md\n      sha256: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\ncapabilities:\n  - id: CAP:refund:main\n    name: 核心能力\n    desc: 需补充\n    concepts:\n      - CONCEPT:refund\n    rules: []\n    claim_type: code_fact\n    status: UNVERIFIED\n    review_status: pending\n    lifecycle: current\n    evidence: []\n    applicability:\n      conditions: []\n      versions: []\n      limitations:\n        - 尚未分析，需沿授权业务范围核实来源与适用条件\n",
+    "domains/claims.yaml": "meta:\n  schema_version: \"2.0\"\n  knowledge_id: K:fixture-core:refund:claims\n  product: fixture-core\n  domain: refund\n  systems:\n    - order-core\n  knowledge_type: claims\n  generated_at: 2026-11-01T00:00:00.000Z\n  review_status: pending\n  owner: null\n  lifecycle: current\n  sources:\n    - kind: code\n      repository: order-core\n      commit: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n      worktree_status: clean\n    - kind: document\n      document_id: prd\n      path: prd.md\n      sha256: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\nclaims:\n  - id: CLAIM:refund:risk\n    name: 待核实风险\n    desc: 需补充\n    claim_type: inference\n    status: UNVERIFIED\n    review_status: pending\n    lifecycle: current\n    evidence: []\n    applicability:\n      conditions: []\n      versions: []\n      limitations:\n        - 尚未分析，需沿授权业务范围核实来源与适用条件\n",
+    "domains/concepts.yaml": "meta:\n  schema_version: \"2.0\"\n  knowledge_id: K:fixture-core:refund:concepts\n  product: fixture-core\n  domain: refund\n  systems:\n    - order-core\n  knowledge_type: concepts\n  generated_at: 2026-11-01T00:00:00.000Z\n  review_status: pending\n  owner: null\n  lifecycle: current\n  sources:\n    - kind: code\n      repository: order-core\n      commit: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n      worktree_status: clean\n    - kind: document\n      document_id: prd\n      path: prd.md\n      sha256: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\nconcepts:\n  - id: CONCEPT:refund\n    name: 退款\n    type: domain_entity\n    desc: 需补充\n    related: []\n    claim_type: business_rule\n    status: UNVERIFIED\n    review_status: pending\n    lifecycle: current\n    evidence: []\n    applicability:\n      conditions: []\n      versions: []\n      limitations:\n        - 尚未分析，需沿授权业务范围核实来源与适用条件\n",
+    "domains/flows.md": "---\nschema_version: \"2.0\"\nknowledge_id: K:fixture-core:refund:flows\nproduct: fixture-core\ndomain: refund\nsystems:\n  - order-core\nknowledge_type: flows\ngenerated_at: 2026-11-01T00:00:00.000Z\nreview_status: pending\nowner: null\nlifecycle: current\nsources:\n  - kind: code\n    repository: order-core\n    commit: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n    worktree_status: clean\n  - kind: document\n    document_id: prd\n    path: prd.md\n    sha256: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\nclaim_refs:\n  - FLOW:refund:main\n---\n\n# 退款 - 核心流程\n\n需补充\n\n详细流程维护在 flows.yaml，以 FLOW ID 引用；保留触发条件、业务对象与关键步骤摘要，规则通过 RULE ID 引用，不重复维护定义。\n",
+    "domains/flows.yaml": "meta:\n  schema_version: \"2.0\"\n  knowledge_id: K:fixture-core:refund:flow_definitions\n  product: fixture-core\n  domain: refund\n  systems:\n    - order-core\n  knowledge_type: flow_definitions\n  generated_at: 2026-11-01T00:00:00.000Z\n  review_status: pending\n  owner: null\n  lifecycle: current\n  sources:\n    - kind: code\n      repository: order-core\n      commit: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n      worktree_status: clean\n    - kind: document\n      document_id: prd\n      path: prd.md\n      sha256: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\nflows:\n  - id: FLOW:refund:main\n    name: 核心流程\n    trigger: 需补充\n    scope: 需补充\n    preconditions: []\n    steps: []\n    data_changes: []\n    async_events: []\n    failures: []\n    compensation: []\n    capabilities:\n      - CAP:refund:main\n    rules: []\n    tests:\n      discovered: []\n      read: []\n      executions: []\n      limitations:\n        - 未发现、阅读或运行测试，覆盖范围待核实\n    claim_type: code_fact\n    status: UNVERIFIED\n    review_status: pending\n    lifecycle: current\n    evidence: []\n    applicability:\n      conditions: []\n      versions: []\n      limitations:\n        - 尚未分析，需沿授权业务范围核实来源与适用条件\n",
+    "domains/glossary.yaml": "meta:\n  schema_version: \"2.0\"\n  knowledge_id: K:fixture-core:refund:glossary\n  product: fixture-core\n  domain: refund\n  systems:\n    - order-core\n  knowledge_type: glossary\n  generated_at: 2026-11-01T00:00:00.000Z\n  review_status: pending\n  owner: null\n  lifecycle: current\n  sources:\n    - kind: code\n      repository: order-core\n      commit: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n      worktree_status: clean\n    - kind: document\n      document_id: prd\n      path: prd.md\n      sha256: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\nterms:\n  - id: TERM:refund:main\n    term: 退款\n    meaning: 需补充\n    claim_type: business_rule\n    status: UNVERIFIED\n    review_status: pending\n    lifecycle: current\n    evidence: []\n    applicability:\n      conditions: []\n      versions: []\n      limitations:\n        - 尚未分析，需沿授权业务范围核实来源与适用条件\n",
+    "domains/overview.md": "---\nschema_version: \"2.0\"\nknowledge_id: K:fixture-core:refund:overview\nproduct: fixture-core\ndomain: refund\nsystems:\n  - order-core\nknowledge_type: overview\ngenerated_at: 2026-11-01T00:00:00.000Z\nreview_status: pending\nowner: null\nlifecycle: current\nsources:\n  - kind: code\n    repository: order-core\n    commit: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n    worktree_status: clean\n  - kind: document\n    document_id: prd\n    path: prd.md\n    sha256: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\nclaim_refs:\n  - CAP:refund:main\n---\n\n# 退款 - 业务域概览\n\n## 业务边界与角色\n\n需补充\n\n## 能力与主要依赖\n\n使用稳定 ID 引用能力与流程，写明业务背景。\n\n## 核验与审核\n\nVERIFIED 仅表示代码证据核验，不表示业务审核；默认 pending。\n",
+    "domains/pitfalls.md": "---\nschema_version: \"2.0\"\nknowledge_id: K:fixture-core:refund:pitfalls\nproduct: fixture-core\ndomain: refund\nsystems:\n  - order-core\nknowledge_type: pitfalls\ngenerated_at: 2026-11-01T00:00:00.000Z\nreview_status: pending\nowner: null\nlifecycle: current\nsources:\n  - kind: code\n    repository: order-core\n    commit: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n    worktree_status: clean\n  - kind: document\n    document_id: prd\n    path: prd.md\n    sha256: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\nclaim_refs:\n  - CLAIM:refund:risk\n---\n\n# 退款 - 风险与已知限制\n\n需补充\n\n风险结论维护在 claims.yaml，按稳定 ID 引用并说明适用背景、影响与未核实环节。没有测试执行记录不等于已有局部源码事实无效。\n",
+    "domains/rules.yaml": "meta:\n  schema_version: \"2.0\"\n  knowledge_id: K:fixture-core:refund:business_rules\n  product: fixture-core\n  domain: refund\n  systems:\n    - order-core\n  knowledge_type: business_rules\n  generated_at: 2026-11-01T00:00:00.000Z\n  review_status: pending\n  owner: null\n  lifecycle: current\n  sources:\n    - kind: code\n      repository: order-core\n      commit: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n      worktree_status: clean\n    - kind: document\n      document_id: prd\n      path: prd.md\n      sha256: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\nrules:\n  - id: RULE:refund:main\n    name: 核心业务规则\n    subject: 退款\n    severity: medium\n    desc: 需补充\n    checked_scope: 尚未核验\n    claim_type: business_rule\n    status: UNVERIFIED\n    review_status: pending\n    lifecycle: current\n    evidence: []\n    applicability:\n      conditions: []\n      versions: []\n      limitations:\n        - 尚未分析，需沿授权业务范围核实来源与适用条件\n",
+    "graph/curated/refund.graph.yaml": "meta:\n  schema_version: \"2.0\"\n  knowledge_id: K:fixture-core:refund:code_graph\n  product: fixture-core\n  domain: refund\n  systems:\n    - order-core\n  knowledge_type: code_graph\n  generated_at: 2026-11-01T00:00:00.000Z\n  review_status: pending\n  owner: null\n  lifecycle: current\n  sources:\n    - kind: code\n      repository: order-core\n      commit: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n      worktree_status: clean\n    - kind: document\n      document_id: prd\n      path: prd.md\n      sha256: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n  verified_commits:\n    order-core: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\nnodes:\n  - id: DOMAIN:refund\n    type: BusinessDomain\n    name: 退款\n    desc: 需补充业务域代码事实节点\nedges: []\n",
+    "mappings/refund.mapping.yaml": "meta:\n  schema_version: \"2.0\"\n  knowledge_id: K:fixture-core:refund:code_mappings\n  product: fixture-core\n  domain: refund\n  systems:\n    - order-core\n  knowledge_type: code_mappings\n  generated_at: 2026-11-01T00:00:00.000Z\n  review_status: pending\n  owner: null\n  lifecycle: current\n  sources:\n    - kind: code\n      repository: order-core\n      commit: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n      worktree_status: clean\n    - kind: document\n      document_id: prd\n      path: prd.md\n      sha256: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\ndomain: refund\ncapability_mappings: []\nrule_mappings: []\nflow_mappings: []\nentry_points: []\n"
+  },
+  "report": {
+    "errors": [],
+    "warnings": [],
+    "assets": [
+      {
+        "file": "domains/capabilities.yaml",
+        "schema_version": "2.0",
+        "knowledge_id": "K:fixture:refund:capabilities",
+        "product": "fixture",
+        "domain": "refund",
+        "systems": [
+          "fixture-core"
+        ],
+        "knowledge_type": "capabilities",
+        "generated_at": "2026-11-20T11:18:23.321Z",
+        "review_status": "pending",
+        "owner": null,
+        "lifecycle": "current",
+        "sources": [
+          {
+            "kind": "code",
+            "repository": "fixture-core",
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "worktree_status": "clean"
+          }
+        ]
+      },
+      {
+        "file": "domains/claims.yaml",
+        "schema_version": "2.0",
+        "knowledge_id": "K:fixture:refund:claims",
+        "product": "fixture",
+        "domain": "refund",
+        "systems": [
+          "fixture-core"
+        ],
+        "knowledge_type": "claims",
+        "generated_at": "2026-11-20T11:18:23.321Z",
+        "review_status": "pending",
+        "owner": null,
+        "lifecycle": "current",
+        "sources": [
+          {
+            "kind": "code",
+            "repository": "fixture-core",
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "worktree_status": "clean"
+          }
+        ]
+      },
+      {
+        "file": "domains/concepts.yaml",
+        "schema_version": "2.0",
+        "knowledge_id": "K:fixture:refund:concepts",
+        "product": "fixture",
+        "domain": "refund",
+        "systems": [
+          "fixture-core"
+        ],
+        "knowledge_type": "concepts",
+        "generated_at": "2026-11-20T11:18:23.321Z",
+        "review_status": "pending",
+        "owner": null,
+        "lifecycle": "current",
+        "sources": [
+          {
+            "kind": "code",
+            "repository": "fixture-core",
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "worktree_status": "clean"
+          }
+        ]
+      },
+      {
+        "file": "domains/flows.md",
+        "schema_version": "2.0",
+        "knowledge_id": "K:fixture:refund:flows",
+        "product": "fixture",
+        "domain": "refund",
+        "systems": [
+          "fixture-core"
+        ],
+        "knowledge_type": "flows",
+        "generated_at": "2026-11-20T11:18:23.321Z",
+        "review_status": "pending",
+        "owner": null,
+        "lifecycle": "current",
+        "sources": [
+          {
+            "kind": "code",
+            "repository": "fixture-core",
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "worktree_status": "clean"
+          }
+        ],
+        "claim_refs": [
+          "FLOW:refund:refund",
+          "RULE:refund:positive"
+        ]
+      },
+      {
+        "file": "domains/flows.yaml",
+        "schema_version": "2.0",
+        "knowledge_id": "K:fixture:refund:flow_definitions",
+        "product": "fixture",
+        "domain": "refund",
+        "systems": [
+          "fixture-core"
+        ],
+        "knowledge_type": "flow_definitions",
+        "generated_at": "2026-11-20T11:18:23.321Z",
+        "review_status": "pending",
+        "owner": null,
+        "lifecycle": "current",
+        "sources": [
+          {
+            "kind": "code",
+            "repository": "fixture-core",
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "worktree_status": "clean"
+          }
+        ]
+      },
+      {
+        "file": "domains/glossary.yaml",
+        "schema_version": "2.0",
+        "knowledge_id": "K:fixture:refund:glossary",
+        "product": "fixture",
+        "domain": "refund",
+        "systems": [
+          "fixture-core"
+        ],
+        "knowledge_type": "glossary",
+        "generated_at": "2026-11-20T11:18:23.321Z",
+        "review_status": "pending",
+        "owner": null,
+        "lifecycle": "current",
+        "sources": [
+          {
+            "kind": "code",
+            "repository": "fixture-core",
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "worktree_status": "clean"
+          }
+        ]
+      },
+      {
+        "file": "domains/overview.md",
+        "schema_version": "2.0",
+        "knowledge_id": "K:fixture:refund:overview",
+        "product": "fixture",
+        "domain": "refund",
+        "systems": [
+          "fixture-core"
+        ],
+        "knowledge_type": "overview",
+        "generated_at": "2026-11-20T11:18:23.321Z",
+        "review_status": "pending",
+        "owner": null,
+        "lifecycle": "current",
+        "sources": [
+          {
+            "kind": "code",
+            "repository": "fixture-core",
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "worktree_status": "clean"
+          }
+        ],
+        "claim_refs": [
+          "CAP:refund:refund"
+        ]
+      },
+      {
+        "file": "domains/pitfalls.md",
+        "schema_version": "2.0",
+        "knowledge_id": "K:fixture:refund:pitfalls",
+        "product": "fixture",
+        "domain": "refund",
+        "systems": [
+          "fixture-core"
+        ],
+        "knowledge_type": "pitfalls",
+        "generated_at": "2026-11-20T11:18:23.321Z",
+        "review_status": "pending",
+        "owner": null,
+        "lifecycle": "current",
+        "sources": [
+          {
+            "kind": "code",
+            "repository": "fixture-core",
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "worktree_status": "clean"
+          }
+        ],
+        "claim_refs": [
+          "CLAIM:refund:risk"
+        ]
+      },
+      {
+        "file": "domains/rules.yaml",
+        "schema_version": "2.0",
+        "knowledge_id": "K:fixture:refund:business_rules",
+        "product": "fixture",
+        "domain": "refund",
+        "systems": [
+          "fixture-core"
+        ],
+        "knowledge_type": "business_rules",
+        "generated_at": "2026-11-20T11:18:23.321Z",
+        "review_status": "pending",
+        "owner": null,
+        "lifecycle": "current",
+        "sources": [
+          {
+            "kind": "code",
+            "repository": "fixture-core",
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "worktree_status": "clean"
+          }
+        ]
+      },
+      {
+        "file": "graph/curated/refund.graph.yaml",
+        "schema_version": "2.0",
+        "knowledge_id": "K:fixture:refund:code_graph",
+        "product": "fixture",
+        "domain": "refund",
+        "systems": [
+          "fixture-core"
+        ],
+        "knowledge_type": "code_graph",
+        "generated_at": "2026-11-20T11:18:23.321Z",
+        "review_status": "pending",
+        "owner": null,
+        "lifecycle": "current",
+        "sources": [
+          {
+            "kind": "code",
+            "repository": "fixture-core",
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "worktree_status": "clean"
+          }
+        ],
+        "verified_commits": {
+          "fixture-core": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      },
+      {
+        "file": "mappings/refund.mapping.yaml",
+        "schema_version": "2.0",
+        "knowledge_id": "K:fixture:refund:code_mappings",
+        "product": "fixture",
+        "domain": "refund",
+        "systems": [
+          "fixture-core"
+        ],
+        "knowledge_type": "code_mappings",
+        "generated_at": "2026-11-20T11:18:23.321Z",
+        "review_status": "pending",
+        "owner": null,
+        "lifecycle": "current",
+        "sources": [
+          {
+            "kind": "code",
+            "repository": "fixture-core",
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "worktree_status": "clean"
+          }
+        ]
+      }
+    ],
+    "impact": [
+      {
+        "repository": "fixture-core",
+        "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "path": "refund.js",
+        "symbol": "refund",
+        "knowledge_id": "K:fixture:refund:capabilities",
+        "claim_id": "CAP:refund:refund",
+        "lifecycle": "current"
+      },
+      {
+        "repository": "fixture-core",
+        "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "path": "refund.js",
+        "symbol": "refund",
+        "knowledge_id": "K:fixture:refund:concepts",
+        "claim_id": "CONCEPT:refund:refund",
+        "lifecycle": "current"
+      },
+      {
+        "repository": "fixture-core",
+        "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "path": "refund.js",
+        "symbol": "refund",
+        "knowledge_id": "K:fixture:refund:flow_definitions",
+        "claim_id": "FLOW:refund:refund",
+        "lifecycle": "current"
+      },
+      {
+        "repository": "fixture-core",
+        "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "path": "refund.js",
+        "symbol": "refund",
+        "knowledge_id": "K:fixture:refund:glossary",
+        "claim_id": "TERM:refund:refund",
+        "lifecycle": "current"
+      },
+      {
+        "repository": "fixture-core",
+        "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "path": "refund.js",
+        "symbol": "refund",
+        "knowledge_id": "K:fixture:refund:business_rules",
+        "claim_id": "RULE:refund:positive",
+        "lifecycle": "current"
+      },
+      {
+        "repository": "fixture-core",
+        "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "path": "refund.js",
+        "symbol": "refund",
+        "knowledge_id": "K:fixture:refund:code_graph",
+        "claim_id": "FUNC:fixture-core:refund"
+      }
+    ]
+  },
+  "hashes": {
+    "references/analysis.md": "ebeebc23a1d3d9861d8b44619b819881e0930e51b7d0c5ee8b75806f3df753cc",
+    "references/downstream-contract.md": "db84f4f570969d214df00c3d321f35b3ea145ec6a6177b0cb2a682db2d6d3d03",
+    "references/knowledge-model.md": "f8cfba0a640a98621eb1caa566457ddaaf67946b51fb8c18d00f3da7e105af6e",
+    "assets/ontology/concept-types.yaml": "70a74fd3142ea124395fe1b1b66d4e51fc5fc386673d59254d22799c76536c0d",
+    "assets/ontology/node-types.yaml": "c2914ff0604a38b5a6242e853716eae9a37340c9f984472df77ad4edb14e7c8b",
+    "assets/ontology/relation-types.yaml": "da90f36073106128a8c39fa9f1436d94bfd6c415532d5b57e623d3caee78de86",
+    "assets/ontology/schema.md": "92b6ff5e64b1098072a8a88d13ed937f5946d3974294f55d7fa601fd159e7e88",
+    "assets/rules/sync-rules.md": "f39bdc5bd8b6398012b553083dd978150adfc34e49ed90b926d41a4bcbae297b",
+    "assets/rules/validation-rules.yaml": "03f09fd51da110a01570464b813f907a0ba80dc16e19fa7fb7d4aaa6f98b3102"
+  }
+}

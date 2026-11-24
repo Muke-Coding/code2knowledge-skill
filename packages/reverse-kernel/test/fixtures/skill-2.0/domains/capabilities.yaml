@@ -1,0 +1,47 @@
+meta:
+  schema_version: "2.0"
+  knowledge_id: K:fixture:refund:capabilities
+  product: fixture
+  domain: refund
+  systems:
+    - fixture-core
+  knowledge_type: capabilities
+  generated_at: 2026-11-20T11:18:23.321Z
+  review_status: pending
+  owner: null
+  lifecycle: current
+  sources:
+    - kind: code
+      repository: fixture-core
+      commit: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      worktree_status: clean
+capabilities:
+  - id: CAP:refund:refund
+    name: 执行退款
+    desc: 返还金额
+    concepts:
+      - CONCEPT:refund:refund
+    rules:
+      - RULE:refund:positive
+    claim_type: code_fact
+    status: VERIFIED
+    review_status: pending
+    lifecycle: current
+    evidence:
+      - kind: code
+        repository: fixture-core
+        commit: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        path: refund.js
+        symbol: refund
+        lines:
+          - 1
+          - 1
+        supports: refund 实现执行退款
+        node_id: FUNC:fixture-core:refund
+    applicability:
+      conditions:
+        - 调用 refund，金额为正数
+      versions:
+        - fixture-core@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      limitations:
+        - 仅核实源码局部行为，未验证生产配置及完整业务口径

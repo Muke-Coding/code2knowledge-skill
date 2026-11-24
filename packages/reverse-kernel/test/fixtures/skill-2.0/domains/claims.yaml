@@ -1,0 +1,32 @@
+meta:
+  schema_version: "2.0"
+  knowledge_id: K:fixture:refund:claims
+  product: fixture
+  domain: refund
+  systems:
+    - fixture-core
+  knowledge_type: claims
+  generated_at: 2026-11-20T11:18:23.321Z
+  review_status: pending
+  owner: null
+  lifecycle: current
+  sources:
+    - kind: code
+      repository: fixture-core
+      commit: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      worktree_status: clean
+claims:
+  - id: CLAIM:refund:risk
+    name: 生产调用链待确认
+    desc: 无法由局部函数证明生产环境完整退款行为
+    claim_type: inference
+    status: UNVERIFIED
+    review_status: pending
+    lifecycle: current
+    evidence: []
+    applicability:
+      conditions:
+        - 生产部署
+      versions: []
+      limitations:
+        - 未读取部署配置及外部支付实现
